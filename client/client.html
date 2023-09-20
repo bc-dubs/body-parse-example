@@ -28,8 +28,23 @@
       
     };
 
-    const sendPost = (nameForm) => {
+    const sendPost = async (nameForm) => {
+      const nameAction = nameForm.getAttribute("action");
+      const nameMethod = nameForm.getAttribute("method");
 
+      const name = nameForm.querySelector("#nameField").value;
+      const age = nameForm.querySelector("#ageField").value;
+
+      const formData = `name=${name}&age=${age}`;
+
+      const response = await fetch(nameAction, {
+        method: nameMethod,
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData
+      });
     };
 
     const init = () => {
@@ -51,6 +66,7 @@
 <body>
   <section id="top">
     <h3>POST Status Code Tests</h3>
+    <!-- URL-encoded format sent from form: name=[value]&age=[value]-->
     <form id="nameForm" action="/addUser" method="post">
       <label for="name">Name: </label>
       <input id="nameField" type="text" name="name" />
