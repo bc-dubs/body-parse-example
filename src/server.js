@@ -15,12 +15,18 @@ const parseBody = (request, response, callback) => {
     response.end();
   });
 
-  request.on("data", () => { // Called evey time we recieve a piece of data
+  request.on("data", (chunk) => { // Called evey time we recieve a piece of data
     body.push(chunk);
   });
 
   request.on("end", () => { // Called when all data has been received
     console.log(body);
+
+    const bodyString = Buffer.concat(body).toString(); // Buffers are like arrays but temporary
+    const bodyParams = query.parse(bodyString); // Used to parse url-encoded format
+    // Can use an if statement to parse body string differently depending on the MIME type recieved (request.headers['content-type'])
+
+    callback(request, response, bodyParams);
   });
 }
 

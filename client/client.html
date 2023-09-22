@@ -5,7 +5,7 @@
   <link rel="stylesheet" type="text/css" href="/style.css">
   
   <script>
-    const handleResponse = (response) => {
+    const handleResponse = async (response) => {
       const content = document.querySelector('#content');
       
       switch(response.status) {
@@ -26,6 +26,11 @@
           break;
       }
       
+      const obj = await response.json();
+      if(obj.message) {
+        content.innerHTML += `<p>${obj.message}</p>`;
+      }
+
     };
 
     const sendPost = async (nameForm) => {
@@ -45,6 +50,7 @@
         },
         body: formData
       });
+      handleResponse(response);
     };
 
     const init = () => {
